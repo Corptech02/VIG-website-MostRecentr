@@ -695,13 +695,6 @@ function createRealFormFields(policyId, policyData) {
               return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '') ?
                      `LIMIT $${cargoLimit}` : '';
           })() },
-        { id: 'otherDeductibleAbove', x: 635, y: 686, width: 83, height: 16,
-          value: (function() {
-              const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
-              const cargoDeductible = policyData?.coverage?.cargo_deductible || policyData?.coverage?.['Cargo Deductible'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoDeductible) ?
-                     `DED. $${cargoDeductible}` : '';
-          })() },
 
         // === NON OWNED TRAILER PHYSICAL DAMAGE ROW (y: 718) ===
         { id: 'nonOwnedTrailerInsurer', x: 23, y: 718, width: 23, height: 16,
@@ -749,23 +742,6 @@ function createRealFormFields(policyId, policyData) {
               return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? `DED. ${nonOwnedTrailerDed}` : '';
           })() },
 
-        // === ADDITIONAL TEXT BOXES BELOW THE HORIZONTAL ROW (y: 734) ===
-        { id: 'otherInsurerBelow', x: 23, y: 734, width: 23, height: 16,
-          value: '' },
-        { id: 'otherDescriptionBelow', x: 52, y: 734, width: 173, height: 16,
-          value: '' },
-        { id: 'otherAddlInsdBelow', x: 229, y: 734, width: 23, height: 16,
-          value: '' },
-        { id: 'otherSubrWvdBelow', x: 252, y: 734, width: 23, height: 16,
-          value: '' },
-        { id: 'otherPolicyNumBelow', x: 281, y: 734, width: 146, height: 16,
-          value: '' },
-        { id: 'otherEffDateBelow', x: 430, y: 734, width: 61, height: 16,
-          value: '' },
-        { id: 'otherExpDateBelow', x: 491, y: 734, width: 61, height: 16,
-          value: '' },
-        { id: 'otherLimitsBelow', x: 552, y: 734, width: 83, height: 16,
-          value: '' },
 
         // === GENERAL LIABILITY LIMITS ===
         { id: 'eachOccurrence', x: 684, y: 390, width: 83, height: 16,
