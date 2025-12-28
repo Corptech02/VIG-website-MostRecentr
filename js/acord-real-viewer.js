@@ -483,8 +483,12 @@ function createRealFormFields(policyId, policyData) {
         // === MIDDLE ROW (y: 702) - PHYSICAL DAMAGE COVERAGE ===
         { id: 'otherInsurer', x: 23, y: 702, width: 23, height: 16,
           value: (function() {
-              const compDed = parseFloat(policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0');
-              const collDed = parseFloat(policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0');
+              const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
+              const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
+              const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
+
               return (compDed > 0 && collDed > 0) ? 'A' : '';
           })() },
         { id: 'otherAddlInsd', x: 229, y: 702, width: 23, height: 16,
@@ -493,32 +497,55 @@ function createRealFormFields(policyId, policyData) {
           value: '' },
         { id: 'otherPolicyNum', x: 281, y: 702, width: 146, height: 16,
           value: (function() {
-              const compDed = parseFloat(policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0');
-              const collDed = parseFloat(policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0');
+              const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
+              const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
+              const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
+
               return (compDed > 0 && collDed > 0) ? (policyData?.policy_number || policyData?.policyNumber || '') : '';
           })() },
         { id: 'otherEffDate', x: 430, y: 702, width: 61, height: 16,
           value: (function() {
-              const compDed = parseFloat(policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0');
-              const collDed = parseFloat(policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0');
+              const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
+              const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
+              const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
+
               return (compDed > 0 && collDed > 0) ? formatDateForACORD(policyData?.effective_date) : '';
           })() },
         { id: 'otherExpDate', x: 491, y: 702, width: 61, height: 16,
           value: (function() {
-              const compDed = parseFloat(policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0');
-              const collDed = parseFloat(policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0');
+              const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
+              const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
+              const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
+
               return (compDed > 0 && collDed > 0) ? formatDateForACORD(policyData?.expiration_date) : '';
           })() },
         { id: 'otherLimits', x: 552, y: 702, width: 83, height: 16,
           value: (function() {
-              const compDed = parseFloat(policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0');
-              const collDed = parseFloat(policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0');
+              const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
+              const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
+              const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
+
               return (compDed > 0 && collDed > 0) ? 'COMP & COLLISION' : '';
           })() },
         { id: 'otherDescription', x: 52, y: 702, width: 173, height: 16,
           value: (function() {
-              const compDed = parseFloat(policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0');
-              const collDed = parseFloat(policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0');
+              // Enhanced parsing to handle currency formats like "$2,500"
+              const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
+              const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
+              const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
+
+              console.log('🔧 PHYSICAL DAMAGE DEBUG: compDed =', compDed, 'collDed =', collDed, 'both > 0?', compDed > 0 && collDed > 0);
+
               return (compDed > 0 && collDed > 0) ? 'PHYSICAL DAMAGE' : '';
           })() },
         { id: 'glInsurer', x: 23, y: 437, width: 23, height: 16,
@@ -610,8 +637,12 @@ function createRealFormFields(policyId, policyData) {
           })() },
         { id: 'otherLimit2', x: 684, y: 702, width: 83, height: 16,
           value: (function() {
-              const compDed = parseFloat(policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0');
-              const collDed = parseFloat(policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0');
+              const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
+              const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
+              const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
+
               if (compDed > 0 && collDed > 0) {
                   // Check if both deductibles are the same
                   if (compDed === collDed) {
@@ -672,22 +703,68 @@ function createRealFormFields(policyId, policyData) {
                      `DED. $${cargoDeductible}` : '';
           })() },
 
-        // === ADDITIONAL TEXT BOXES BELOW THE HORIZONTAL ROW (y: 718) ===
-        { id: 'otherInsurerBelow', x: 23, y: 718, width: 23, height: 16,
+        // === NON OWNED TRAILER PHYSICAL DAMAGE ROW (y: 718) ===
+        { id: 'nonOwnedTrailerInsurer', x: 23, y: 718, width: 23, height: 16,
+          value: (function() {
+              const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
+              const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
+              console.log('🚛 NON OWNED TRAILER DEBUG: trailer =', nonOwnedTrailer, 'deductible =', nonOwnedTrailerDed);
+              return 'A'; // ALWAYS SHOW FOR TESTING
+          })() },
+        { id: 'nonOwnedTrailerText', x: 52, y: 718, width: 173, height: 16,
+          value: (function() {
+              const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
+              const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
+              console.log('🚛 NON OWNED TRAILER TEXT DEBUG: show?', nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '');
+              return 'NON OWNED TRAIL PHYS DAMAGE'; // ALWAYS SHOW FOR TESTING
+          })() },
+        { id: 'nonOwnedTrailerPolicyNum', x: 281, y: 718, width: 146, height: 16,
+          value: (function() {
+              const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
+              const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? (policyData?.policy_number || policyData?.policyNumber || '') : '';
+          })() },
+        { id: 'nonOwnedTrailerEffDate', x: 430, y: 718, width: 61, height: 16,
+          value: (function() {
+              const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
+              const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? formatDateForACORD(policyData?.effective_date) : '';
+          })() },
+        { id: 'nonOwnedTrailerExpDate', x: 491, y: 718, width: 61, height: 16,
+          value: (function() {
+              const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
+              const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? formatDateForACORD(policyData?.expiration_date) : '';
+          })() },
+        { id: 'nonOwnedTrailerLimits', x: 552, y: 718, width: 83, height: 16,
+          value: (function() {
+              const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
+              const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? `LIMIT ${nonOwnedTrailer}` : '';
+          })() },
+        { id: 'nonOwnedTrailerDeductible', x: 684, y: 718, width: 83, height: 16,
+          value: (function() {
+              const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
+              const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? `DED. ${nonOwnedTrailerDed}` : '';
+          })() },
+
+        // === ADDITIONAL TEXT BOXES BELOW THE HORIZONTAL ROW (y: 734) ===
+        { id: 'otherInsurerBelow', x: 23, y: 734, width: 23, height: 16,
           value: '' },
-        { id: 'otherDescriptionBelow', x: 52, y: 718, width: 173, height: 16,
+        { id: 'otherDescriptionBelow', x: 52, y: 734, width: 173, height: 16,
           value: '' },
-        { id: 'otherAddlInsdBelow', x: 229, y: 718, width: 23, height: 16,
+        { id: 'otherAddlInsdBelow', x: 229, y: 734, width: 23, height: 16,
           value: '' },
-        { id: 'otherSubrWvdBelow', x: 252, y: 718, width: 23, height: 16,
+        { id: 'otherSubrWvdBelow', x: 252, y: 734, width: 23, height: 16,
           value: '' },
-        { id: 'otherPolicyNumBelow', x: 281, y: 718, width: 146, height: 16,
+        { id: 'otherPolicyNumBelow', x: 281, y: 734, width: 146, height: 16,
           value: '' },
-        { id: 'otherEffDateBelow', x: 430, y: 718, width: 61, height: 16,
+        { id: 'otherEffDateBelow', x: 430, y: 734, width: 61, height: 16,
           value: '' },
-        { id: 'otherExpDateBelow', x: 491, y: 718, width: 61, height: 16,
+        { id: 'otherExpDateBelow', x: 491, y: 734, width: 61, height: 16,
           value: '' },
-        { id: 'otherLimitsBelow', x: 552, y: 718, width: 83, height: 16,
+        { id: 'otherLimitsBelow', x: 552, y: 734, width: 83, height: 16,
           value: '' },
 
         // === GENERAL LIABILITY LIMITS ===
