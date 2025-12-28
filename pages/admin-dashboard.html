@@ -3400,6 +3400,148 @@ contact@vigagency.com`;
         });
 
 
+        // Coverage field population function
+        function populateCoverageFields(policy) {
+            console.log('🛡️ Populating coverage fields for policy:', policy);
+
+            const coverage = policy.coverage || {};
+            const detailedCoverage = policy.detailed_crm_data?.coverage || {};
+
+            // Helper function to set coverage field (handles both input and select elements)
+            const setCoverageField = (fieldId, value, defaultValue = '') => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    if (!value && !defaultValue) {
+                        console.log(`⚠️ No value for ${fieldId}, skipping`);
+                        return;
+                    }
+
+                    // Handle different value formats
+                    let displayValue = value;
+                    if (typeof value === 'number') displayValue = value.toString();
+                    if (typeof value === 'object' && value.limit) displayValue = value.limit;
+                    if (typeof value === 'object' && value.combined_single_limit) displayValue = value.combined_single_limit;
+
+                    displayValue = displayValue || defaultValue;
+
+                    if (field.tagName.toLowerCase() === 'select') {
+                        // Handle dropdown/select elements
+                        console.log(`🔍 Setting SELECT ${fieldId} with value: ${displayValue}`);
+
+                        // First try exact match
+                        const exactOption = Array.from(field.options).find(option =>
+                            option.value === displayValue || option.text === displayValue
+                        );
+
+                        if (exactOption) {
+                            field.value = exactOption.value;
+                            console.log(`✅ Set SELECT ${fieldId}: ${exactOption.value} (exact match)`);
+                        } else {
+                            // Try to find close match or add custom option
+                            const numericValue = parseInt(displayValue.replace(/[,$]/g, ''));
+                            let bestMatch = null;
+
+                            // Look for numeric matches (e.g., 1000000 -> $1,000,000)
+                            for (const option of field.options) {
+                                const optionNumeric = parseInt(option.value.replace(/[,$]/g, ''));
+                                if (!isNaN(numericValue) && !isNaN(optionNumeric) && numericValue === optionNumeric) {
+                                    bestMatch = option;
+                                    break;
+                                }
+                            }
+
+                            if (bestMatch) {
+                                field.value = bestMatch.value;
+                                console.log(`✅ Set SELECT ${fieldId}: ${bestMatch.value} (numeric match)`);
+                            } else {
+                                // Add custom option if no match found
+                                const customOption = document.createElement('option');
+                                customOption.value = displayValue;
+                                customOption.text = displayValue;
+                                field.appendChild(customOption);
+                                field.value = displayValue;
+                                console.log(`✅ Set SELECT ${fieldId}: ${displayValue} (custom option added)`);
+                            }
+                        }
+                    } else {
+                        // Handle regular input elements
+                        field.value = displayValue;
+                        console.log(`✅ Set INPUT ${fieldId}: ${displayValue}`);
+                    }
+                }
+            };
+
+            // Map all coverage fields
+            setCoverageField('editLiabilityLimits',
+                coverage['Liability Limits'] ||
+                detailedCoverage['Liability Limits'] ||
+                coverage.auto_liability?.combined_single_limit ||
+                coverage.liability_limits ||
+                (coverage.auto_liability && coverage.auto_liability.combined_single_limit)
+            );
+            setCoverageField('editGeneralAggregate',
+                coverage['General Aggregate'] ||
+                detailedCoverage['General Aggregate'] ||
+                coverage.general_aggregate
+            );
+            setCoverageField('editComprehensiveDeductible',
+                coverage['Comprehensive Deductible'] ||
+                detailedCoverage['Comprehensive Deductible'] ||
+                coverage.physical_damage?.comprehensive_deductible ||
+                coverage.comprehensive_deductible
+            );
+            setCoverageField('editCollisionDeductible',
+                coverage['Collision Deductible'] ||
+                detailedCoverage['Collision Deductible'] ||
+                coverage.physical_damage?.collision_deductible ||
+                coverage.collision_deductible
+            );
+            setCoverageField('editCargoLimit',
+                coverage['Cargo Limit'] ||
+                detailedCoverage['Cargo Limit'] ||
+                coverage.cargo?.limit ||
+                coverage.cargo_limit
+            );
+            setCoverageField('editCargoDeductible',
+                coverage['Cargo Deductible'] ||
+                detailedCoverage['Cargo Deductible'] ||
+                coverage.cargo?.deductible ||
+                coverage.cargo_deductible
+            );
+            setCoverageField('editMedicalPayments',
+                coverage['Medical Payments'] ||
+                detailedCoverage['Medical Payments'] ||
+                coverage.medical_payments
+            );
+            setCoverageField('editUninsuredMotorist',
+                coverage['Uninsured/Underinsured Motorist'] ||
+                detailedCoverage['Uninsured/Underinsured Motorist'] ||
+                coverage.uninsured_motorist
+            );
+            setCoverageField('editTrailerInterchange',
+                coverage['Trailer Interchange Limit'] ||
+                detailedCoverage['Trailer Interchange Limit'] ||
+                coverage.trailer_interchange
+            );
+            setCoverageField('editNonTruckingLiability',
+                coverage['Non-Trucking Liability'] ||
+                detailedCoverage['Non-Trucking Liability'] ||
+                coverage.non_trucking_liability
+            );
+            setCoverageField('editNonOwnedTrailer',
+                coverage['Non Owned Trailer'] ||
+                detailedCoverage['Non Owned Trailer'] ||
+                coverage.non_owned_trailer
+            );
+            setCoverageField('editNonOwnedTrailerDeductible',
+                coverage['Non Owned Trailer Deductible'] ||
+                detailedCoverage['Non Owned Trailer Deductible'] ||
+                coverage.non_owned_trailer_deductible
+            );
+
+            console.log('✅ Coverage fields population completed');
+        }
+
         // FINAL editPolicy function - ensure this overrides all others
         console.log('✅ DEFINING editPolicy function on window');
         window.editPolicy = async function(policyId) {
@@ -3519,6 +3661,9 @@ contact@vigagency.com`;
 
                 modal.style.display = 'flex';
                 console.log('✅ Edit modal opened for:', clientName);
+
+                // Populate coverage fields immediately after modal is shown
+                populateCoverageFields(policy);
             }
 
             // Populate vehicles, drivers, and trailers after a delay to ensure clean containers
@@ -4267,7 +4412,7 @@ contact@vigagency.com`;
     <script src="../pdf.min.js"></script>
 
     <!-- Real ACORD Viewer System -->
-    <script src="../js/acord-real-viewer.js?v=20251228-clean-unnecessary-fields-1766931245"></script>
+    <script src="../js/acord-real-viewer.js?v=20251228-none-option-hide-rows-1766933456"></script>
     <script src="../js/acord-25-embedded.js?v=20251221-concise"></script>
     <script src="../js/fix-acord-download-print.js?v=20251222-fix-import-interception"></script>
     <script>
@@ -7644,6 +7789,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Liability Limits</label>
                                 <select id="editLiabilityLimits" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Liability Limits</option>
+                                    <option value="None">None</option>
                                     <option value="$300,000 CSL">$300,000 CSL</option>
                                     <option value="$500,000 CSL">$500,000 CSL</option>
                                     <option value="$750,000 CSL">$750,000 CSL</option>
@@ -7657,6 +7803,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">General Aggregate</label>
                                 <select id="editGeneralAggregate" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select General Aggregate</option>
+                                    <option value="None">None</option>
                                     <option value="$1,000,000">$1,000,000</option>
                                     <option value="$1,500,000">$1,500,000</option>
                                     <option value="$2,000,000">$2,000,000</option>
@@ -7679,6 +7826,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Comprehensive Deductible</label>
                                 <select id="editComprehensiveDeductible" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Deductible</option>
+                                    <option value="None">None</option>
                                     <option value="$0">$0</option>
                                     <option value="$250">$250</option>
                                     <option value="$500">$500</option>
@@ -7691,6 +7839,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Collision Deductible</label>
                                 <select id="editCollisionDeductible" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Deductible</option>
+                                    <option value="None">None</option>
                                     <option value="$0">$0</option>
                                     <option value="$250">$250</option>
                                     <option value="$500">$500</option>
@@ -7713,6 +7862,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Cargo Limit</label>
                                 <select id="editCargoLimit" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Cargo Limit</option>
+                                    <option value="None">None</option>
                                     <option value="$25,000">$25,000</option>
                                     <option value="$50,000">$50,000</option>
                                     <option value="$75,000">$75,000</option>
@@ -7727,6 +7877,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Cargo Deductible</label>
                                 <select id="editCargoDeductible" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Cargo Deductible</option>
+                                    <option value="None">None</option>
                                     <option value="$0">$0</option>
                                     <option value="$1,000">$1,000</option>
                                     <option value="$1,500">$1,500</option>
@@ -7750,6 +7901,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Medical Payments</label>
                                 <select id="editMedicalPayments" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Limit</option>
+                                    <option value="None">None</option>
                                     <option value="$1,000">$1,000</option>
                                     <option value="$2,500">$2,500</option>
                                     <option value="$5,000">$5,000</option>
@@ -7760,6 +7912,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Uninsured/Underinsured Motorist</label>
                                 <select id="editUninsuredMotorist" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Limit</option>
+                                    <option value="None">None</option>
                                     <option value="$100,000">$100,000</option>
                                     <option value="$250,000">$250,000</option>
                                     <option value="$500,000">$500,000</option>
@@ -7770,6 +7923,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Trailer Interchange Limit</label>
                                 <select id="editTrailerInterchange" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Limit</option>
+                                    <option value="None">None</option>
                                     <option value="$25,000">$25,000</option>
                                     <option value="$50,000">$50,000</option>
                                     <option value="$75,000">$75,000</option>
@@ -7780,6 +7934,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Non-Trucking Liability</label>
                                 <select id="editNonTruckingLiability" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Limit</option>
+                                    <option value="None">None</option>
                                     <option value="$300,000">$300,000</option>
                                     <option value="$500,000">$500,000</option>
                                     <option value="$1,000,000">$1,000,000</option>
@@ -7789,6 +7944,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Non Owned Trailer</label>
                                 <select id="editNonOwnedTrailer" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Limit</option>
+                                    <option value="None">None</option>
                                     <option value="$25,000">$25,000</option>
                                     <option value="$50,000">$50,000</option>
                                     <option value="$75,000">$75,000</option>
@@ -7799,6 +7955,7 @@ contact@vigagency.com`;
                                 <label style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">Non Owned Trailer Deductible</label>
                                 <select id="editNonOwnedTrailerDeductible" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
                                     <option value="">Select Deductible</option>
+                                    <option value="None">None</option>
                                     <option value="$500">$500</option>
                                     <option value="$1,000">$1,000</option>
                                     <option value="$2,500">$2,500</option>

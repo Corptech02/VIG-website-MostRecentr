@@ -486,6 +486,9 @@ function createRealFormFields(policyId, policyData) {
               const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
               const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
 
+              // Check for 'None' values first
+              if (compDedRaw === 'None' || collDedRaw === 'None') return '';
+
               const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
               const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
 
@@ -500,6 +503,9 @@ function createRealFormFields(policyId, policyData) {
               const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
               const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
 
+              // Check for 'None' values first
+              if (compDedRaw === 'None' || collDedRaw === 'None') return '';
+
               const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
               const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
 
@@ -509,6 +515,9 @@ function createRealFormFields(policyId, policyData) {
           value: (function() {
               const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
               const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              // Check for 'None' values first
+              if (compDedRaw === 'None' || collDedRaw === 'None') return '';
 
               const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
               const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
@@ -520,6 +529,9 @@ function createRealFormFields(policyId, policyData) {
               const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
               const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
 
+              // Check for 'None' values first
+              if (compDedRaw === 'None' || collDedRaw === 'None') return '';
+
               const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
               const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
 
@@ -529,6 +541,9 @@ function createRealFormFields(policyId, policyData) {
           value: (function() {
               const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
               const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              // Check for 'None' values first
+              if (compDedRaw === 'None' || collDedRaw === 'None') return '';
 
               const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
               const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
@@ -540,6 +555,9 @@ function createRealFormFields(policyId, policyData) {
               // Enhanced parsing to handle currency formats like "$2,500"
               const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
               const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              // Check for 'None' values first
+              if (compDedRaw === 'None' || collDedRaw === 'None') return '';
 
               const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
               const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
@@ -632,13 +650,16 @@ function createRealFormFields(policyId, policyData) {
           value: (function() {
               const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
               const cargoDeductible = policyData?.coverage?.cargo_deductible || policyData?.coverage?.['Cargo Deductible'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoDeductible) ?
+              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoLimit !== 'None' && cargoDeductible && cargoDeductible !== 'None') ?
                      `DED. $${cargoDeductible}` : '';
           })() },
         { id: 'otherLimit2', x: 684, y: 702, width: 83, height: 16,
           value: (function() {
               const compDedRaw = policyData?.coverage?.comprehensive_deductible || policyData?.coverage?.['Comprehensive Deductible'] || '0';
               const collDedRaw = policyData?.coverage?.collision_deductible || policyData?.coverage?.['Collision Deductible'] || '0';
+
+              // Check for 'None' values first
+              if (compDedRaw === 'None' || collDedRaw === 'None') return '';
 
               const compDed = parseFloat(String(compDedRaw).replace(/[$,]/g, ''));
               const collDed = parseFloat(String(collDedRaw).replace(/[$,]/g, ''));
@@ -660,12 +681,12 @@ function createRealFormFields(policyId, policyData) {
         { id: 'otherInsurerAbove', x: 23, y: 686, width: 23, height: 16,
           value: (function() {
               const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '') ? 'A' : '';
+              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoLimit !== 'None') ? 'A' : '';
           })() },
         { id: 'otherDescriptionAbove', x: 52, y: 686, width: 173, height: 16,
           value: (function() {
               const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '') ? 'MOTOR TRUCK CARGO' : '';
+              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoLimit !== 'None') ? 'MOTOR TRUCK CARGO' : '';
           })() },
         { id: 'otherAddlInsdAbove', x: 229, y: 686, width: 23, height: 16,
           value: '' },
@@ -674,25 +695,25 @@ function createRealFormFields(policyId, policyData) {
         { id: 'otherPolicyNumAbove', x: 281, y: 686, width: 146, height: 16,
           value: (function() {
               const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '') ?
+              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoLimit !== 'None') ?
                      (policyData?.policy_number || policyData?.policyNumber || '') : '';
           })() },
         { id: 'otherEffDateAbove', x: 430, y: 686, width: 61, height: 16,
           value: (function() {
               const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '') ?
+              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoLimit !== 'None') ?
                      formatDateForACORD(policyData?.effective_date) : '';
           })() },
         { id: 'otherExpDateAbove', x: 491, y: 686, width: 61, height: 16,
           value: (function() {
               const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '') ?
+              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoLimit !== 'None') ?
                      formatDateForACORD(policyData?.expiration_date) : '';
           })() },
         { id: 'otherLimitsAbove', x: 552, y: 686, width: 83, height: 16,
           value: (function() {
               const cargoLimit = policyData?.coverage?.cargo_limit || policyData?.coverage?.['Cargo Limit'] || '';
-              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '') ?
+              return (cargoLimit && cargoLimit !== '0' && cargoLimit !== '' && cargoLimit !== 'None') ?
                      `LIMIT $${cargoLimit}` : '';
           })() },
 
@@ -702,44 +723,44 @@ function createRealFormFields(policyId, policyData) {
               const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
               const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
               console.log('🚛 NON OWNED TRAILER DEBUG: trailer =', nonOwnedTrailer, 'deductible =', nonOwnedTrailerDed);
-              return 'A'; // ALWAYS SHOW FOR TESTING
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailer !== 'None' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '' && nonOwnedTrailerDed !== 'None') ? 'A' : '';
           })() },
         { id: 'nonOwnedTrailerText', x: 52, y: 718, width: 173, height: 16,
           value: (function() {
               const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
               const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
               console.log('🚛 NON OWNED TRAILER TEXT DEBUG: show?', nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '');
-              return 'NON OWNED TRAIL PHYS DAMAGE'; // ALWAYS SHOW FOR TESTING
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailer !== 'None' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '' && nonOwnedTrailerDed !== 'None') ? 'NON OWNED TRAIL PHYS DAMAGE' : '';
           })() },
         { id: 'nonOwnedTrailerPolicyNum', x: 281, y: 718, width: 146, height: 16,
           value: (function() {
               const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
               const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
-              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? (policyData?.policy_number || policyData?.policyNumber || '') : '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailer !== 'None' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '' && nonOwnedTrailerDed !== 'None') ? (policyData?.policy_number || policyData?.policyNumber || '') : '';
           })() },
         { id: 'nonOwnedTrailerEffDate', x: 430, y: 718, width: 61, height: 16,
           value: (function() {
               const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
               const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
-              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? formatDateForACORD(policyData?.effective_date) : '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailer !== 'None' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '' && nonOwnedTrailerDed !== 'None') ? formatDateForACORD(policyData?.effective_date) : '';
           })() },
         { id: 'nonOwnedTrailerExpDate', x: 491, y: 718, width: 61, height: 16,
           value: (function() {
               const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
               const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
-              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? formatDateForACORD(policyData?.expiration_date) : '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailer !== 'None' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '' && nonOwnedTrailerDed !== 'None') ? formatDateForACORD(policyData?.expiration_date) : '';
           })() },
         { id: 'nonOwnedTrailerLimits', x: 552, y: 718, width: 83, height: 16,
           value: (function() {
               const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
               const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
-              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? `LIMIT ${nonOwnedTrailer}` : '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailer !== 'None' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '' && nonOwnedTrailerDed !== 'None') ? `LIMIT ${nonOwnedTrailer}` : '';
           })() },
         { id: 'nonOwnedTrailerDeductible', x: 684, y: 718, width: 83, height: 16,
           value: (function() {
               const nonOwnedTrailer = policyData?.coverage?.non_owned_trailer || '';
               const nonOwnedTrailerDed = policyData?.coverage?.non_owned_trailer_deductible || '';
-              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '') ? `DED. ${nonOwnedTrailerDed}` : '';
+              return (nonOwnedTrailer && nonOwnedTrailer !== '' && nonOwnedTrailer !== 'None' && nonOwnedTrailerDed && nonOwnedTrailerDed !== '' && nonOwnedTrailerDed !== 'None') ? `DED. ${nonOwnedTrailerDed}` : '';
           })() },
 
 
